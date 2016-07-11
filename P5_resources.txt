@@ -17,3 +17,5 @@ http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestCl
 http://scikit-learn.org/stable/modules/generated/sklearn.cross_validation.StratifiedShuffleSplit.html
 http://stats.stackexchange.com/questions/91922/splitting-an-imbalanced-dataset-for-training-and-testing
 http://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html
+
+“I hereby confirm that this submission is my work. I have cited above the origins of any parts of the submission that were taken from Websites, books, forums, blog posts, github repositories, etc."
