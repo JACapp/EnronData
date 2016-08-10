@@ -169,6 +169,8 @@ df.set_index(employees, inplace=True)
 df_dict = df.to_dict('index')
 
 # Store to my_dataset for easy export below.
+print "Storing features and data"
+
 my_dataset = df_dict
 my_feature_list = ['poi','bonus', 'deferral_payments', 'deferred_income', 'director_fees',
  'exercised_stock_options', 'expenses', 'from_messages',
@@ -178,6 +180,8 @@ my_feature_list = ['poi','bonus', 'deferral_payments', 'deferred_income', 'direc
  'to_messages', 'total_payments', 'total_stock_value', 'poi_email_ratio',
  'payment_ratio']
 # Extract features and labels from dataset for local testing
+
+print "Extract features for testing"
 data = featureFormat(my_dataset, my_feature_list, sort_keys = True)
 labels, features = targetFeatureSplit(data)
 
@@ -204,6 +208,7 @@ for train_idx, test_idx in cv:
 ### Note that if you want to do PCA or other multi-stage operations,
 ### you'll need to use Pipelines. For more info:
 ### http://scikit-learn.org/stable/modules/pipeline.html
+print "Classifier:"
 
 #create a pipeline for analysis - Random Forest
 scaler = preprocessing.StandardScaler()
@@ -219,7 +224,7 @@ steps = [('scale', scaler),('feature_selection', feature_selection),
 pipeline = sklearn.pipeline.Pipeline(steps)
 
 #search for best parameters
-parameters = dict(feature_selection__select__k=[5, 10, 20],
+parameters = dict(feature_selection__select__k=[10],
                  feature_selection__pca__n_components=[2, 5, 10],
                  random_forest__n_estimators=[25, 50, 100],
                  random_forest__min_samples_split=[1, 3, 5, 10])
@@ -229,25 +234,12 @@ clf = sklearn.grid_search.GridSearchCV(pipeline, param_grid=parameters)
 clf.fit(features_train, labels_train)
 pred = clf.predict(features_test)
 
-print select.get_support()
 print clf.best_params_
 
 #pipeline.fit(features_train, labels_train)
 #pred = pipeline.predict(features_test)
 report = sklearn.metrics.classification_report(labels_test, pred)
 print report
-
-
-# In[26]:
-
-#take selectKbest out of the pipeline to look at top features
-k_best = SelectKBest(k=5)
-k_best.fit(features, labels)
-
-results_list = zip(k_best.get_support(), my_feature_list[1:], k_best.scores_)
-results_list = sorted(results_list, key=lambda x: x[2], reverse=True)
-print "K-best features:", results_list
-
 
 # The random forest classifier appears to produce the best precision and recall scores. I further tuned this classifier by adjusting the parameters in the grid search and testing whether both feature selection and dimensionality reduction were needed to produce the highest precision and recall scores. They were.
 
